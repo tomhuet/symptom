@@ -24,22 +24,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL) ?? '');
     $message = trim(filter_input(INPUT_POST, 'message', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? 
                     filter_input(INPUT_POST, 'project', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '');
+    $isProjectLead = !empty($_POST['project']) && empty($email);
     
     // Validation
     $errors = [];
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (!$isProjectLead && (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL))) {
         $errors[] = 'Email invalide';
     }
-    if (empty($message) || strlen($message) < 10) {
+    if (empty($message) || strlen($message) < 6) {
         $errors[] = 'Message trop court';
     }
     
     if (empty($errors)) {
         // Prepare email content
         $to = 'hello@symptom.agency';
-        $subject = 'Nouveau message de ' . ($name ?: 'Visiteur');
-        $body = "Nom: $name\nEmail: $email\n\nMessage:\n$message";
-        $headers = "From: noreply@symptom.agency\r\nReply-To: $email\r\n";
+        $subject = $isProjectLead ? 'Brief express - projet' : 'Nouveau message de ' . ($name ?: 'Visiteur');
+        $body = $isProjectLead
+            ? "Brief express reçu\nNom: " . ($name ?: 'Non renseigné') . "\nContact email: " . ($email ?: 'Non fourni') . "\n\nProjet:\n$message"
+            : "Nom: $name\nEmail: $email\n\nMessage:\n$message";
+        $headers = "From: noreply@symptom.agency\r\n";
+        if (!$isProjectLead && !empty($email)) {
+            $headers .= "Reply-To: $email\r\n";
+        }
         
         // Send email (note: mail() might not work in all environments)
         @mail($to, $subject, $body, $headers);
@@ -56,7 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'name' => $name,
             'email' => $email,
             'message' => $message,
-            'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown'
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+            'type' => $isProjectLead ? 'project_brief' : 'contact'
         ];
         file_put_contents($logFile, json_encode($contacts, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }

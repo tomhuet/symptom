@@ -1,0 +1,32 @@
+[
+  {
+    "id": "rev-helix",
+    "project_id": "helix-labs-platform",
+    "rating": 5,
+    "content": "Equipe hyper structurée : cadrage rapide, delivery maîtrisé et des dashboards qui donnent enfin de la visibilité.",
+    "author": "Claire M.",
+    "position": "COO",
+    "company": "Helix Labs",
+    "created_at": "2025-01-21 08:00:00"
+  },
+  {
+    "id": "rev-arcadia",
+    "project_id": "arcadia-commerce",
+    "rating": 5,
+    "content": "On a doublé la cadence d'expérimentation sans sacrifier la qualité. La stack est robuste et simple à faire évoluer.",
+    "author": "Julien R.",
+    "position": "Head of Product",
+    "company": "Arcadia Commerce",
+    "created_at": "2025-01-14 12:30:00"
+  },
+  {
+    "id": "rev-solis",
+    "project_id": "solis-mobility",
+    "rating": 4,
+    "content": "Ils ont apporté de la méthode et une exécution propre. Les équipes internes ont été embarquées très vite.",
+    "author": "Sonia L.",
+    "position": "VP Engineering",
+    "company": "Solis Mobility",
+    "created_at": "2025-01-05 09:45:00"
+  }
+]

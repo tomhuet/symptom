@@ -1,6 +1,13 @@
 <?php
 require_once 'config.php';
 
+// Security headers
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: SAMEORIGIN');
+header('X-XSS-Protection: 1; mode=block');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'");
+
 $projects = getProjects();
 $reviews = getReviews();
 usort($projects, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['created_at']));
@@ -12,11 +19,60 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="SYMPTOM - Agence produit et tech. Designed to perform. Conseil, développement, IA, automatisation.">
+  <meta name="keywords" content="agence digitale, développement web, IA, automatisation, conseil tech">
+  <meta name="author" content="SYMPTOM">
+  <meta name="theme-color" content="#000000">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="<?php echo SITE_URL; ?>">
+  <meta property="og:title" content="SYMPTOM - Designed to Perform">
+  <meta property="og:description" content="Agence produit et tech. Conseil, développement, IA, automatisation.">
+  <meta property="og:image" content="<?php echo SITE_URL; ?>/assets/img/og-image.png">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="<?php echo SITE_URL; ?>">
+  <meta property="twitter:title" content="SYMPTOM - Designed to Perform">
+  <meta property="twitter:description" content="Agence produit et tech. Conseil, développement, IA, automatisation.">
+  <meta property="twitter:image" content="<?php echo SITE_URL; ?>/assets/img/og-image.png">
+  
   <title>SYMPTOM - Designed to Perform</title>
+  
+  <!-- Preconnect to external resources -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Fonts with display swap for better performance -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="assets/css/styles.css" as="style">
+  <link rel="preload" href="assets/js/script.js" as="script">
+  
   <link rel="stylesheet" href="assets/css/styles.css">
+  
+  <!-- Schema.org markup for organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "SYMPTOM",
+    "url": "<?php echo SITE_URL; ?>",
+    "logo": "<?php echo SITE_URL; ?>/assets/img/logo.png",
+    "description": "Agence produit et tech. Designed to perform. Conseil, développement, IA, automatisation.",
+    "email": "hello@symptom.agency",
+    "telephone": "+33123456789",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "FR"
+    },
+    "sameAs": [
+      "https://linkedin.com",
+      "https://twitter.com"
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -108,10 +164,11 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
       <p class="hero-desc">Nous concevons des solutions sur-mesure qui transforment vos idées en produits performants.</p>
 
       <form class="hero-form" id="hero-form">
+        <input type="hidden" name="csrf_token" value="<?php echo getCSRFToken(); ?>">
         <div class="form-input-wrap">
-          <input type="text" name="project" placeholder="Décrivez votre projet..." required>
+          <input type="text" name="project" placeholder="Décrivez votre projet..." required aria-label="Description de votre projet">
           <button type="submit" class="form-btn" aria-label="Envoyer">
-            <svg class="btn-icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg class="btn-icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
             <div class="btn-loader"><div class="spinner"></div></div>
@@ -484,21 +541,25 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
             </div>
           </div>
 
-          <form class="contact-form" id="contact-form">
+          <form class="contact-form" id="contact-form" action="/contact-submit.php" method="POST">
+            <input type="hidden" name="csrf_token" value="<?php echo getCSRFToken(); ?>">
             <div class="form-group">
               <label for="name">Nom</label>
-              <input type="text" id="name" name="name" required>
+              <input type="text" id="name" name="name" required aria-required="true">
               <div class="input-line"></div>
+              <span class="error-message">Ce champ est requis</span>
             </div>
             <div class="form-group">
               <label for="email">Email</label>
-              <input type="email" id="email" name="email" required>
+              <input type="email" id="email" name="email" required aria-required="true">
               <div class="input-line"></div>
+              <span class="error-message">Email invalide</span>
             </div>
             <div class="form-group">
               <label for="message">Votre projet</label>
-              <textarea id="message" name="message" rows="4" required></textarea>
+              <textarea id="message" name="message" rows="4" required aria-required="true"></textarea>
               <div class="input-line"></div>
+              <span class="error-message">Ce champ est requis</span>
             </div>
             <button type="submit" class="btn-submit"><span>Envoyer</span></button>
           </form>

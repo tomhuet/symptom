@@ -1,0 +1,24 @@
+# Data files
+/data/cache_*.json
+/data/contacts/
+
+# Build artifacts
+/assets/css/*.min.css
+/assets/js/*.min.js
+
+# Temporary files
+/tmp/
+
+# Environment
+.env
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# System files
+.DS_Store
+Thumbs.db

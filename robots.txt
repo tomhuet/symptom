@@ -7,7 +7,7 @@ Disallow: /data/
 Disallow: /uploads/
 Disallow: /config.php
 Disallow: /contact-submit.php
-Disallow: /*.json$
+Disallow: /*.json
 Disallow: /*?*sent=
 Disallow: /*?*error=
 

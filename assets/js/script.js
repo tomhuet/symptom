@@ -283,83 +283,86 @@ function handleFormSubmit(e) {
   if (stackingCards.length > 0) {
     window.addEventListener('scroll', updateStackingCards);
   }
-});
-
-// Performance: Throttle function for scroll events
-function throttle(func, wait) {
-  var timeout;
-  var previous = 0;
-  return function() {
-    var now = Date.now();
-    var remaining = wait - (now - previous);
-    var context = this;
-    var args = arguments;
-    
-    if (remaining <= 0 || remaining > wait) {
-      if (timeout) {
-        clearTimeout(timeout);
-        timeout = null;
-      }
-      previous = now;
-      func.apply(context, args);
-    } else if (!timeout) {
-      timeout = setTimeout(function() {
-        previous = Date.now();
-        timeout = null;
+  
+  // Performance: Throttle function for scroll events
+  function throttle(func, wait) {
+    var timeout;
+    var previous = 0;
+    return function() {
+      var now = Date.now();
+      var remaining = wait - (now - previous);
+      var context = this;
+      var args = arguments;
+      
+      if (remaining <= 0 || remaining > wait) {
+        if (timeout) {
+          clearTimeout(timeout);
+          timeout = null;
+        }
+        previous = now;
         func.apply(context, args);
-      }, remaining);
-    }
-  };
-}
-
-// Performance: Use throttled scroll handlers
-window.addEventListener('scroll', throttle(checkReveal, 200));
-if (stackingCards.length > 0) {
-  window.addEventListener('scroll', throttle(updateStackingCards, 100));
-}
-
-// Accessibility: Handle keyboard navigation for mobile menu
-if (mobileMenu) {
-  var firstFocusable = mobileMenu.querySelector('.mobile-link');
-  var focusableElements = mobileMenu.querySelectorAll('.mobile-link');
-  var lastFocusable = focusableElements[focusableElements.length - 1];
-  
-  mobileMenu.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      mobileToggle.classList.remove('active');
-      mobileMenu.classList.remove('active');
-      mobileToggle.focus();
-    }
-    
-    if (e.key === 'Tab') {
-      if (e.shiftKey && document.activeElement === firstFocusable) {
-        e.preventDefault();
-        lastFocusable.focus();
-      } else if (!e.shiftKey && document.activeElement === lastFocusable) {
-        e.preventDefault();
-        firstFocusable.focus();
+      } else if (!timeout) {
+        timeout = setTimeout(function() {
+          previous = Date.now();
+          timeout = null;
+          func.apply(context, args);
+        }, remaining);
       }
-    }
-  });
-}
-
-// Preload critical resources on interaction
-var hasInteracted = false;
-function preloadResources() {
-  if (hasInteracted) return;
-  hasInteracted = true;
-  
-  // Preload images that are below the fold
-  var lazyImages = document.querySelectorAll('img[loading="lazy"]');
-  for (var i = 0; i < Math.min(3, lazyImages.length); i++) {
-    var img = new Image();
-    img.src = lazyImages[i].src;
+    };
   }
-}
 
-// Trigger preload on first interaction
-['mousemove', 'scroll', 'keydown', 'click', 'touchstart'].forEach(function(event) {
-  document.addEventListener(event, preloadResources, { once: true, passive: true });
+  // Performance: Use throttled scroll handlers (replace existing ones)
+  window.removeEventListener('scroll', checkReveal);
+  window.addEventListener('scroll', throttle(checkReveal, 200));
+  
+  if (stackingCards.length > 0) {
+    window.removeEventListener('scroll', updateStackingCards);
+    window.addEventListener('scroll', throttle(updateStackingCards, 100));
+  }
+
+  // Accessibility: Handle keyboard navigation for mobile menu
+  if (mobileMenu) {
+    var firstFocusable = mobileMenu.querySelector('.mobile-link');
+    var focusableElements = mobileMenu.querySelectorAll('.mobile-link');
+    var lastFocusable = focusableElements[focusableElements.length - 1];
+    
+    mobileMenu.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        mobileToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        mobileToggle.focus();
+      }
+      
+      if (e.key === 'Tab') {
+        if (e.shiftKey && document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    });
+  }
+
+  // Preload critical resources on interaction
+  var hasInteracted = false;
+  function preloadResources() {
+    if (hasInteracted) return;
+    hasInteracted = true;
+    
+    // Preload images that are below the fold
+    var lazyImages = document.querySelectorAll('img[loading="lazy"]');
+    for (var i = 0; i < Math.min(3, lazyImages.length); i++) {
+      var img = new Image();
+      img.src = lazyImages[i].src;
+    }
+  }
+
+  // Trigger preload on first interaction
+  ['mousemove', 'scroll', 'keydown', 'click', 'touchstart'].forEach(function(event) {
+    document.addEventListener(event, preloadResources, { once: true, passive: true });
+  });
 });
 
 // Add loading class to body when page is still loading

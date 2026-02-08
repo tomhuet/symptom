@@ -85,11 +85,6 @@ ErrorDocument 404 /404.php
     AddOutputFilterByType DEFLATE application/javascript application/json application/xml
     AddOutputFilterByType DEFLATE application/xhtml+xml application/rss+xml
     AddOutputFilterByType DEFLATE image/svg+xml
-    
-    # Remove browser bugs
-    BrowserMatch ^Mozilla/4 gzip-only-text/html
-    BrowserMatch ^Mozilla/4\.0[678] no-gzip
-    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
 </IfModule>
 
 # php -- BEGIN cPanel-generated handler, do not edit

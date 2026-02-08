@@ -17,7 +17,8 @@ define('SITE_NAME', 'SYMPTOM');
 define('SITE_URL', 'https://www.symptom.agency');
 define('ADMIN_USERNAME', 'admin');
 // TODO: Use environment variables for sensitive data
-define('ADMIN_PASSWORD', password_hash('symptom2025', PASSWORD_DEFAULT));
+// This is the pre-hashed password for 'symptom2025' - change in production
+define('ADMIN_PASSWORD', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
 define('DATA_DIR', __DIR__ . '/data/');
 define('UPLOADS_DIR', __DIR__ . '/uploads/');
 define('PROJECTS_FILE', DATA_DIR . 'projects.json');

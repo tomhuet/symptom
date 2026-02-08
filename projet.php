@@ -76,7 +76,7 @@ $otherProjects = array_slice(array_filter($allProjects, fn($p) => $p['id'] !== $
 
   <nav class="nav" id="nav">
     <div class="nav-inner">
-      <a href="/" class="nav-logo"><img src="/assets/img/logo.png" alt="SYMPTOM"></a>
+      <a href="/" class="nav-logo"><img src="/assets/img/logo.svg" alt="SYMPTOM"></a>
       <div class="nav-links">
         <a href="/#services" class="nav-link">Services</a>
         <a href="/#projects" class="nav-link">Projets</a>

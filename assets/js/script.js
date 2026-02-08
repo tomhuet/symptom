@@ -98,6 +98,22 @@ document.addEventListener('DOMContentLoaded', function() {
   var heroForm = document.getElementById('hero-form');
   var contactForm = document.getElementById('contact-form');
   var overlayRocket = document.getElementById('overlay-rocket');
+  var overlayTimeout;
+
+  function showProjectOverlay() {
+    if (!overlayRocket) return;
+    overlayRocket.classList.add('active');
+    if (overlayTimeout) clearTimeout(overlayTimeout);
+    overlayTimeout = setTimeout(function() {
+      overlayRocket.classList.remove('active');
+    }, 3200);
+  }
+
+  function hideProjectOverlay() {
+    if (!overlayRocket) return;
+    overlayRocket.classList.remove('active');
+    if (overlayTimeout) clearTimeout(overlayTimeout);
+  }
   
 // Improved notification system
 function showNotification(message, type = 'success') {
@@ -151,10 +167,15 @@ function validateForm(form) {
 function handleFormSubmit(e) {
   e.preventDefault();
   var form = e.target;
+  var isHeroForm = form.id === 'hero-form';
   
   if (!validateForm(form)) {
     showNotification('Veuillez remplir tous les champs correctement', 'error');
     return;
+  }
+
+  if (isHeroForm) {
+    showProjectOverlay();
   }
   
   var submitBtn = form.querySelector('.form-btn, .btn-submit');
@@ -175,10 +196,11 @@ function handleFormSubmit(e) {
   .then(function(response) { return response.json(); })
   .then(function(data) {
     if (data.success) {
-      showNotification('Votre message a été envoyé avec succès!', 'success');
+      var successMessage = isHeroForm ? 'Brief reçu : on commence déjà à travailler dessus.' : 'Votre message a été envoyé avec succès!';
+      showNotification(successMessage, 'success');
       form.reset();
       
-      if (overlayRocket) {
+      if (!isHeroForm && overlayRocket) {
         overlayRocket.classList.add('active');
         setTimeout(function() {
           overlayRocket.classList.remove('active');
@@ -187,10 +209,12 @@ function handleFormSubmit(e) {
     } else {
       var errorMsg = data.errors ? data.errors.join(', ') : 'Une erreur est survenue';
       showNotification(errorMsg, 'error');
+      if (isHeroForm) hideProjectOverlay();
     }
   })
   .catch(function(error) {
     showNotification('Erreur réseau. Veuillez réessayer.', 'error');
+    if (isHeroForm) hideProjectOverlay();
   })
   .finally(function() {
     if (submitBtn) {
@@ -268,20 +292,20 @@ function handleFormSubmit(e) {
     for (var i = 0; i < stackingCards.length; i++) {
       var card = stackingCards[i];
       var rect = card.getBoundingClientRect();
-      if (rect.top < 120) {
-        var scale = Math.max(0.92, 1 - (120 - rect.top) * 0.0003);
-        var opacity = Math.max(0.6, 1 - (120 - rect.top) * 0.002);
-        card.style.transform = 'scale(' + scale + ')';
-        card.style.opacity = opacity;
-      } else {
-        card.style.transform = 'scale(1)';
-        card.style.opacity = '1';
-      }
+      var depth = parseInt(card.getAttribute('data-index') || '0', 10);
+      var offset = Math.max(0, 140 - rect.top);
+      var stackOffset = depth * 26;
+      var translate = stackOffset + offset * 0.12;
+      var scale = Math.max(0.9, 1 - offset * 0.0008);
+      var opacity = Math.max(0.72, 1 - offset * 0.0025);
+      card.style.transform = 'translateY(' + translate + 'px) scale(' + scale + ')';
+      card.style.opacity = opacity;
     }
   }
   
   if (stackingCards.length > 0) {
     window.addEventListener('scroll', updateStackingCards);
+    updateStackingCards();
   }
   
   // Performance: Throttle function for scroll events

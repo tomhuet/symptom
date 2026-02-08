@@ -59,7 +59,7 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
     "@type": "Organization",
     "name": "SYMPTOM",
     "url": "<?php echo SITE_URL; ?>",
-    "logo": "<?php echo SITE_URL; ?>/assets/img/logo.png",
+    "logo": "<?php echo SITE_URL; ?>/assets/img/logo.svg",
     "description": "Agence produit et tech. Designed to perform. Conseil, développement, IA, automatisation.",
     "email": "hello@symptom.agency",
     "telephone": "+33123456789",
@@ -79,7 +79,7 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
   <div class="loader" id="loader">
     <div class="loader-inner">
       <div class="loader-logo">
-        <img src="assets/img/loader.png" alt="S">
+        <img src="assets/img/loader.svg" alt="S">
       </div>
       <div class="loader-text">SYMPTOM</div>
       <div class="loader-bar">
@@ -91,7 +91,7 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a href="/" class="nav-logo">
-        <img src="assets/img/logo.png" alt="SYMPTOM">
+        <img src="assets/img/logo.svg" alt="SYMPTOM">
       </a>
       <div class="nav-links">
         <a href="#services" class="nav-link">Services</a>
@@ -437,7 +437,7 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
 
       <div class="stacking-cards">
         <?php foreach ($projects as $index => $project): ?>
-        <article class="stacking-card">
+        <article class="stacking-card" data-index="<?php echo $index; ?>" style="--card-index: <?php echo $index; ?>;">
           <div class="card-image">
             <?php if (!empty($project['image'])): ?>
               <img src="<?php echo htmlspecialchars($project['image']); ?>" alt="<?php echo htmlspecialchars($project['company']); ?>" loading="lazy">
@@ -474,30 +474,44 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
     <?php if (!empty($reviews)): ?>
     <section class="reviews-section" id="reviews">
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Témoignages</span>
-          <h2 class="section-title">
-            <span class="reveal-text">Ce que disent</span>
-            <span class="reveal-text">nos clients</span>
-          </h2>
+        <?php $avgRating = round(array_sum(array_column($reviews, 'rating')) / count($reviews), 1); ?>
+        <div class="reviews-header">
+          <div class="section-header">
+            <span class="section-tag">Témoignages</span>
+            <h2 class="section-title">
+              <span class="reveal-text">Ce que disent</span>
+              <span class="reveal-text">nos clients</span>
+            </h2>
+          </div>
+          <div class="reviews-score">
+            <span class="score-label">Score moyen</span>
+            <div class="score-value"><?php echo number_format($avgRating, 1, ',', ' '); ?></div>
+            <p>Basé sur nos derniers projets livrés</p>
+          </div>
         </div>
 
-        <div class="reviews-grid">
+        <div class="reviews-rail">
           <?php foreach ($reviews as $review): ?>
+          <?php $metaLine = trim(($review['position'] ?? '') . (!empty($review['position']) && !empty($review['company']) ? ' • ' : '') . ($review['company'] ?? '')); ?>
           <article class="review-card">
-            <div class="review-stars">
-              <?php for ($i = 1; $i <= 5; $i++): ?>
-                <span class="star <?php echo $i <= $review['rating'] ? 'filled' : ''; ?>">★</span>
-              <?php endfor; ?>
+            <div class="review-top">
+              <span class="review-chip"><?php echo htmlspecialchars($review['company'] ?? 'Client'); ?></span>
+              <div class="review-stars">
+                <?php for ($i = 1; $i <= 5; $i++): ?>
+                  <span class="star <?php echo $i <= $review['rating'] ? 'filled' : ''; ?>">★</span>
+                <?php endfor; ?>
+              </div>
             </div>
             <blockquote class="review-content">"<?php echo htmlspecialchars($review['content']); ?>"</blockquote>
             <div class="review-author">
               <div class="review-avatar"><?php echo strtoupper(substr($review['author'], 0, 1)); ?></div>
               <div class="review-info">
                 <strong><?php echo htmlspecialchars($review['author']); ?></strong>
-                <?php if (!empty($review['position'])): ?><span><?php echo htmlspecialchars($review['position']); ?></span><?php endif; ?>
-                <?php if (!empty($review['company'])): ?><span class="review-company"><?php echo htmlspecialchars($review['company']); ?></span><?php endif; ?>
+                <?php if (!empty($metaLine)): ?><span><?php echo htmlspecialchars($metaLine); ?></span><?php endif; ?>
               </div>
+              <?php if (!empty($review['created_at'])): ?>
+              <span class="review-date"><?php echo date('M Y', strtotime($review['created_at'])); ?></span>
+              <?php endif; ?>
             </div>
           </article>
           <?php endforeach; ?>
@@ -572,7 +586,7 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
     <div class="container">
       <div class="footer-top">
         <div class="footer-brand">
-          <img src="assets/img/logo.png" alt="SYMPTOM" class="footer-logo">
+          <img src="assets/img/logo.svg" alt="SYMPTOM" class="footer-logo">
           <p>Designed to perform.</p>
         </div>
         <div class="footer-links">
@@ -603,14 +617,20 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
   </footer>
 
   <div class="overlay-rocket" id="overlay-rocket">
-    <div class="rocket-content">
-      <div class="rocket-animation">
-        <div class="rocket-icon">🚀</div>
+      <div class="rocket-content">
+        <div class="rocket-orbits">
+          <span class="orbit orbit-1"></span>
+          <span class="orbit orbit-2"></span>
+          <span class="orbit orbit-3"></span>
+        </div>
+        <div class="rocket-animation">
+          <div class="rocket-icon">🚀</div>
+          <div class="rocket-trail"></div>
+        </div>
+        <div class="rocket-loader"><div class="rocket-spinner"></div></div>
+        <h3>Nous sommes déjà en train de travailler sur votre projet</h3>
+        <p>Nous orchestrons l'équipe et préparons un premier plan d'action.</p>
       </div>
-      <div class="rocket-loader"><div class="rocket-spinner"></div></div>
-      <h3>Nous sommes déjà en train de trouver des solutions</h3>
-      <p>Veuillez patienter quelques instants...</p>
-    </div>
   </div>
 
   <script src="assets/js/script.js"></script>

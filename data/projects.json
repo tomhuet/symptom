@@ -1,0 +1,42 @@
+[
+  {
+    "id": "helix-labs-platform",
+    "slug": "helix-labs-platform",
+    "company": "Helix Labs",
+    "sector": "Data & IA",
+    "problem": "Unifier les flux de données marketing pour fiabiliser les décisions.",
+    "description": "<p>Refonte de la plateforme data pour consolider 18 sources en temps réel, poser la gouvernance et alimenter des modèles IA exploitables par les équipes métiers.</p>",
+    "image": "",
+    "created_at": "2025-01-18 09:00:00"
+  },
+  {
+    "id": "arcadia-commerce",
+    "slug": "arcadia-commerce",
+    "company": "Arcadia Commerce",
+    "sector": "E-commerce",
+    "problem": "Automatiser le merchandising et accélérer les tests d'offres.",
+    "description": "<p>Construction d'un design system headless, d'outils d'A/B testing pilotés par l'IA et d'un moteur de recommandation en temps réel.</p>",
+    "image": "",
+    "created_at": "2025-01-10 10:00:00"
+  },
+  {
+    "id": "solis-mobility",
+    "slug": "solis-mobility",
+    "company": "Solis Mobility",
+    "sector": "Mobilité",
+    "problem": "Passer d'une application monolithique à une expérience omnicanale pilotée par la donnée.",
+    "description": "<p>Mise en place d'une architecture micro-frontends, d'un socle API unifié et d'un cockpit d'observabilité pour suivre la performance produit en continu.</p>",
+    "image": "",
+    "created_at": "2024-12-12 08:30:00"
+  },
+  {
+    "id": "nova-assurance",
+    "slug": "nova-assurance",
+    "company": "Nova Assurance",
+    "sector": "Assurance",
+    "problem": "Digitaliser la souscription et réduire le temps de traitement des dossiers.",
+    "description": "<p>Création d'un portail client sécurisé, d'un moteur de scoring automatisé et d'un studio d'orchestration low-code pour accélérer les parcours.</p>",
+    "image": "",
+    "created_at": "2024-11-22 14:15:00"
+  }
+]

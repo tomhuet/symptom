@@ -1,6 +1,12 @@
 <?php
 require_once 'config.php';
 
+// Security headers
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: SAMEORIGIN');
+header('X-XSS-Protection: 1; mode=block');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+
 $slug = isset($_GET['slug']) ? trim($_GET['slug']) : '';
 if (empty($slug)) { header('Location: /'); exit; }
 
@@ -16,16 +22,55 @@ $otherProjects = array_slice(array_filter($allProjects, fn($p) => $p['id'] !== $
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="<?php echo htmlspecialchars($project['problem']); ?>">
-  <meta property="og:title" content="<?php echo htmlspecialchars($project['company']); ?> - SYMPTOM">
-  <meta property="og:description" content="<?php echo htmlspecialchars($project['problem']); ?>">
+  <meta name="description" content="<?php echo escape($project['problem']); ?>">
+  <meta name="keywords" content="<?php echo escape($project['sector']); ?>, projet, SYMPTOM">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="<?php echo SITE_URL; ?>/projet/<?php echo $project['slug']; ?>">
+  <meta property="og:title" content="<?php echo escape($project['company']); ?> - SYMPTOM">
+  <meta property="og:description" content="<?php echo escape($project['problem']); ?>">
+  <?php if (!empty($project['image'])): ?>
+  <meta property="og:image" content="<?php echo SITE_URL; ?>/<?php echo escape($project['image']); ?>">
+  <?php endif; ?>
+  
   <link rel="canonical" href="<?php echo SITE_URL; ?>/projet/<?php echo $project['slug']; ?>">
-  <title><?php echo htmlspecialchars($project['company']); ?> - SYMPTOM</title>
+  <title><?php echo escape($project['company']); ?> - SYMPTOM</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="preload" href="/assets/css/styles.css" as="style">
+  <link rel="preload" href="/assets/css/project.css" as="style">
+  
   <link rel="stylesheet" href="/assets/css/styles.css">
   <link rel="stylesheet" href="/assets/css/project.css">
+  
+  <!-- Schema.org markup for project -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": "<?php echo escape($project['company']); ?>",
+    "description": "<?php echo escape($project['problem']); ?>",
+    "author": {
+      "@type": "Organization",
+      "name": "SYMPTOM"
+    },
+    "datePublished": "<?php echo date('Y-m-d', strtotime($project['created_at'])); ?>"
+    <?php if (!empty($project['image'])): ?>
+    ,"image": "<?php echo SITE_URL; ?>/<?php echo escape($project['image']); ?>"
+    <?php endif; ?>
+    <?php if (!empty($projectReviews)): ?>
+    ,"aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "<?php echo array_sum(array_column($projectReviews, 'rating')) / count($projectReviews); ?>",
+      "reviewCount": "<?php echo count($projectReviews); ?>"
+    }
+    <?php endif; ?>
+  }
+  </script>
 </head>
 <body class="project-page">
 

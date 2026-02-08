@@ -2,6 +2,10 @@
 /data/cache_*.json
 /data/contacts/
 
+# Build artifacts
+/assets/css/*.min.css
+/assets/js/*.min.js
+
 # Temporary files
 /tmp/
 

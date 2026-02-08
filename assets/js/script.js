@@ -99,20 +99,139 @@ document.addEventListener('DOMContentLoaded', function() {
   var contactForm = document.getElementById('contact-form');
   var overlayRocket = document.getElementById('overlay-rocket');
   
-  function handleFormSubmit(e) {
-    e.preventDefault();
-    var submitBtn = e.target.querySelector('.form-btn, .btn-submit');
-    if (submitBtn) {
-      submitBtn.classList.add('loading');
+// Improved notification system
+function showNotification(message, type = 'success') {
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `
+    <div class="notification-header">
+      <div class="notification-icon">${type === 'success' ? '✓' : '✗'}</div>
+      <div class="notification-title">${type === 'success' ? 'Succès' : 'Erreur'}</div>
+    </div>
+    <div class="notification-message">${message}</div>
+  `;
+  document.body.appendChild(notification);
+  
+  setTimeout(function() { notification.classList.add('show'); }, 100);
+  setTimeout(function() {
+    notification.classList.remove('show');
+    setTimeout(function() { notification.remove(); }, 400);
+  }, 5000);
+}
+
+// Form validation helper
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validateForm(form) {
+  var isValid = true;
+  var inputs = form.querySelectorAll('input[required], textarea[required]');
+  
+  for (var i = 0; i < inputs.length; i++) {
+    var input = inputs[i];
+    var group = input.closest('.form-group');
+    var value = input.value.trim();
+    
+    if (!value) {
+      if (group) group.classList.add('error');
+      isValid = false;
+    } else if (input.type === 'email' && !validateEmail(value)) {
+      if (group) group.classList.add('error');
+      isValid = false;
+    } else {
+      if (group) group.classList.remove('error');
     }
-    setTimeout(function() {
+  }
+  
+  return isValid;
+}
+
+// Enhanced form submission with AJAX
+function handleFormSubmit(e) {
+  e.preventDefault();
+  var form = e.target;
+  
+  if (!validateForm(form)) {
+    showNotification('Veuillez remplir tous les champs correctement', 'error');
+    return;
+  }
+  
+  var submitBtn = form.querySelector('.form-btn, .btn-submit');
+  if (submitBtn) {
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+  }
+  
+  var formData = new FormData(form);
+  
+  fetch('/contact-submit.php', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(function(response) { return response.json(); })
+  .then(function(data) {
+    if (data.success) {
+      showNotification('Votre message a été envoyé avec succès!', 'success');
+      form.reset();
+      
       if (overlayRocket) {
         overlayRocket.classList.add('active');
+        setTimeout(function() {
+          overlayRocket.classList.remove('active');
+        }, 3000);
       }
-      setTimeout(function() {
-        window.location.href = '/?sent=1#contact';
-      }, 3000);
-    }, 500);
+    } else {
+      var errorMsg = data.errors ? data.errors.join(', ') : 'Une erreur est survenue';
+      showNotification(errorMsg, 'error');
+    }
+  })
+  .catch(function(error) {
+    showNotification('Erreur réseau. Veuillez réessayer.', 'error');
+  })
+  .finally(function() {
+    if (submitBtn) {
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+    }
+  });
+}
+  
+  // Real-time input validation
+  var allInputs = document.querySelectorAll('.form-group input, .form-group textarea');
+  for (var i = 0; i < allInputs.length; i++) {
+    allInputs[i].addEventListener('blur', function() {
+      var group = this.closest('.form-group');
+      var value = this.value.trim();
+      
+      if (this.hasAttribute('required') && !value) {
+        if (group) group.classList.add('error');
+      } else if (this.type === 'email' && value && !validateEmail(value)) {
+        if (group) group.classList.add('error');
+      } else {
+        if (group) group.classList.remove('error');
+      }
+    });
+    
+    allInputs[i].addEventListener('input', function() {
+      var group = this.closest('.form-group');
+      if (group && group.classList.contains('error')) {
+        group.classList.remove('error');
+      }
+    });
+  }
+  
+  // Check for success/error messages in URL
+  var urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('sent') === '1') {
+    showNotification('Votre message a été envoyé avec succès!', 'success');
+  } else if (urlParams.get('error')) {
+    var errorType = urlParams.get('error');
+    var errorMsg = errorType === 'csrf' ? 'Erreur de sécurité. Veuillez réessayer.' : 'Une erreur est survenue';
+    showNotification(errorMsg, 'error');
   }
   
   if (heroForm) heroForm.addEventListener('submit', handleFormSubmit);

@@ -1,8 +1,20 @@
 User-agent: *
 Allow: /
 
+# Block access to sensitive areas
 Disallow: /admin/
 Disallow: /data/
+Disallow: /uploads/
 Disallow: /config.php
+Disallow: /contact-submit.php
+Disallow: /*.json$
+Disallow: /*?*sent=
+Disallow: /*?*error=
+
+# Block search engines from indexing error pages
+Disallow: /404.php
+
+# Crawl-delay for all bots
+Crawl-delay: 1
 
 Sitemap: https://www.symptom.agency/sitemap.xml

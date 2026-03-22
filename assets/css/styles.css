@@ -111,11 +111,10 @@ img{max-width:100%;height:auto;display:block}
 .services{padding:140px 0;background:var(--gray-900)}
 @media(max-width:768px){.services{padding:100px 0}}
 .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-@media(max-width:1200px){.services-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){.services-grid{grid-template-columns:1fr}}
+@media(max-width:992px){.services-grid{grid-template-columns:1fr}}
 .service-card{position:relative;padding:40px 32px;background:var(--black);border:1px solid var(--gray-800);border-radius:16px;transition:border-color .4s,transform .4s}
 .service-card:hover{border-color:var(--gray-600);transform:translateY(-4px)}
-.service-card-large{min-height:320px}
+.service-card-large{min-height:380px}
 .service-icon{width:48px;height:48px;margin-bottom:24px}
 .service-icon svg{width:100%;height:100%;stroke:var(--gray-400)}
 .service-num{position:absolute;top:24px;right:24px;font-size:.7rem;font-weight:600;color:var(--gray-600)}

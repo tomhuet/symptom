@@ -12,41 +12,35 @@ document.addEventListener('DOMContentLoaded', function() {
   function initRotatingWords() {
     var container = document.getElementById('rotating-words');
     if (!container) return;
-    
+
     var words = container.querySelectorAll('.rotating-word');
     if (words.length === 0) return;
-    
+
     var currentIndex = 0;
     var totalWords = words.length;
-    
+
     function rotateWord() {
       var currentWord = words[currentIndex];
-      var nextIndex = currentIndex + 1;
-      
-      if (nextIndex >= totalWords) return;
-      
+      var nextIndex = (currentIndex + 1) % totalWords;
       var nextWord = words[nextIndex];
-      
+
       currentWord.style.opacity = '0';
       currentWord.style.transform = 'translateY(-100%)';
-      
+
       setTimeout(function() {
         currentWord.classList.remove('active');
         nextWord.classList.add('active');
         nextWord.style.opacity = '1';
         nextWord.style.transform = 'translateY(0)';
       }, 300);
-      
+
       currentIndex = nextIndex;
-      
-      if (currentIndex < totalWords - 1) {
-        setTimeout(rotateWord, 2000);
-      }
+      setTimeout(rotateWord, 2500);
     }
-    
+
     setTimeout(function() {
       rotateWord();
-    }, 4000);
+    }, 3000);
   }
   
   initRotatingWords();

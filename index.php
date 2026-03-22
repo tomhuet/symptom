@@ -145,17 +145,10 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
           <span class="title-word-wrapper">
             <span class="rotating-words" id="rotating-words">
               <span class="rotating-word active">PERFORM</span>
-              <span class="rotating-word">INSPIRE</span>
               <span class="rotating-word">IMPACT</span>
-              <span class="rotating-word">TRANSFORM</span>
-              <span class="rotating-word">INTERACT</span>
               <span class="rotating-word">INNOVATE</span>
-              <span class="rotating-word">MAKE SENSE</span>
-              <span class="rotating-word">CONNECT</span>
-              <span class="rotating-word">CONVERT</span>
-              <span class="rotating-word">EVOLVE</span>
-              <span class="rotating-word">OPTIMIZE</span>
-              <span class="rotating-word">PERFORM</span>
+              <span class="rotating-word">TRANSFORM</span>
+              <span class="rotating-word">INSPIRE</span>
             </span>
           </span>
         </div>
@@ -217,15 +210,15 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
               </svg>
             </div>
             <span class="service-num">01</span>
-            <h3>Conseil & Stratégie</h3>
-            <p>Accompagnement sur-mesure pour votre transformation digitale et l'optimisation de vos processus.</p>
+            <h3>Stratégie & Transformation Digitale</h3>
+            <p>Nous accompagnons les organisations dans la définition et la mise en place de leur stratégie digitale. De l'audit à la feuille de route, nous analysons vos besoins pour identifier les meilleures solutions technologiques et optimiser vos processus.</p>
             <ul class="service-list">
               <li>Audit digital</li>
-              <li>Stratégie de digitalisation</li>
-              <li>Choix d'outils</li>
-              <li>Conformité RGPD</li>
+              <li>Stratégie digitale</li>
+              <li>Feuille de route</li>
+              <li>Analyse des besoins</li>
+              <li>Solutions technologiques</li>
               <li>Optimisation processus</li>
-              <li>Roadmap produit</li>
             </ul>
           </article>
 
@@ -237,87 +230,36 @@ usort($reviews, fn($a, $b) => strtotime($b['created_at']) - strtotime($a['create
               </svg>
             </div>
             <span class="service-num">02</span>
-            <h3>Développement Web & Apps</h3>
-            <p>Création de sites internet et applications web performantes, adaptées à vos besoins spécifiques.</p>
+            <h3>Développement & Solutions Numériques</h3>
+            <p>Conception et développement de sites web, applications et solutions digitales sur mesure. Nous créons des outils performants, évolutifs et adaptés à vos objectifs métier.</p>
             <ul class="service-list">
-              <li>Sites vitrine</li>
-              <li>E-commerce</li>
-              <li>Applications web</li>
-              <li>Applications mobiles</li>
-              <li>APIs & intégrations</li>
-              <li>Maintenance</li>
+              <li>Sites web</li>
+              <li>Applications</li>
+              <li>Solutions sur mesure</li>
+              <li>Outils performants</li>
+              <li>Solutions évolutives</li>
+              <li>Objectifs métier</li>
             </ul>
           </article>
 
           <article class="service-card service-card-large">
             <div class="service-icon">
               <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M24 4L4 14v20l20 10 20-10V14L24 4z"/><path d="M4 14l20 10 20-10M24 44V24"/>
-              </svg>
-            </div>
-            <span class="service-num">03</span>
-            <h3>IA & Automatisation</h3>
-            <p>Intégration de l'intelligence artificielle et automatisation de vos processus métiers.</p>
-            <ul class="service-list">
-              <li>Chatbots IA</li>
-              <li>Agents intelligents</li>
-              <li>Automatisation RPA</li>
-              <li>Formation IA</li>
-              <li>Intégration outils</li>
-              <li>Analyse prédictive</li>
-            </ul>
-          </article>
-
-          <article class="service-card">
-            <div class="service-icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
                 <circle cx="24" cy="12" r="8"/><path d="M8 44c0-9 7-16 16-16s16 7 16 16"/>
-              </svg>
-            </div>
-            <span class="service-num">04</span>
-            <h3>Formation & Adoption</h3>
-            <p>Accompagnement de vos équipes dans la prise en main des outils et nouvelles technologies.</p>
-            <ul class="service-list">
-              <li>Onboarding personnalisé</li>
-              <li>Playbooks</li>
-              <li>Formations sur-mesure</li>
-              <li>Support continu</li>
-            </ul>
-          </article>
-
-          <article class="service-card">
-            <div class="service-icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
                 <circle cx="14" cy="14" r="6"/><circle cx="34" cy="14" r="6"/><circle cx="24" cy="34" r="6"/>
                 <path d="M14 20v8l10 6M34 20v8l-10 6"/>
               </svg>
             </div>
-            <span class="service-num">05</span>
-            <h3>Mise en Relation</h3>
-            <p>Accès à notre réseau d'experts et partenaires pour compléter vos besoins.</p>
+            <span class="service-num">03</span>
+            <h3>Accompagnement & Écosystème</h3>
+            <p>Nous aidons vos équipes à adopter les nouvelles technologies et vous connectons à un réseau d'experts pour soutenir vos projets sur le long terme.</p>
             <ul class="service-list">
-              <li>Experts tech & data</li>
-              <li>Spécialistes IA</li>
-              <li>Consultants sécurité</li>
+              <li>Adoption technologies</li>
+              <li>Formation équipes</li>
+              <li>Réseau d'experts</li>
+              <li>Support long terme</li>
+              <li>Accompagnement continu</li>
               <li>Partenaires métiers</li>
-            </ul>
-          </article>
-
-          <article class="service-card">
-            <div class="service-icon">
-              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="6" y="6" width="36" height="36" rx="4"/>
-                <path d="M6 18h36M18 18v24"/>
-              </svg>
-            </div>
-            <span class="service-num">06</span>
-            <h3>Produit & Prototypage</h3>
-            <p>Validation rapide de vos idées grâce à des prototypes fonctionnels et tests utilisateurs.</p>
-            <ul class="service-list">
-              <li>Wireframes</li>
-              <li>Maquettes</li>
-              <li>POC & MVP</li>
-              <li>Tests utilisateurs</li>
             </ul>
           </article>
         </div>
